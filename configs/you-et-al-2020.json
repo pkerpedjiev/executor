@@ -1,0 +1,3 @@
+{
+    "command": "hic2cool convert https://ftp.ncbi.nlm.nih.gov/geo/series/GSE110nnn/GSE110061/suppl/GSE110061_in-situ_B02_MAPQ30.hic output/GSE110061_in-situ_B02_MAPQ30.mcool"
+}
