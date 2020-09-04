@@ -49,9 +49,11 @@ def main():
     with open(args.conf) as f:
         conf = json.load(f)
 
-
     if not op.exists('fetch'):
         os.makedirs('fetch')
+
+    if not op.exists('output'):
+        os.makedirs('output')
 
     [cmd_parts, to_fetch] = extract_urls(conf['command'])
     filenames = {}
