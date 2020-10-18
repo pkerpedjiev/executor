@@ -49,7 +49,8 @@ def load_steps(base_dir):
         with open(steps_file, 'r') as f:
             steps = json.load(f)
             return steps
-    return None
+
+    return {}
 
 def main():
     parser = argparse.ArgumentParser(description="""
@@ -78,21 +79,22 @@ def main():
     for i,line in enumerate(conf):
         prior_commands = "".join(conf[:i+1])
         cmd_hash = sha256(prior_commands.encode('utf8')).hexdigest()
-        if cmd_hash in steps and steps[cmd_hash]:
-            print("skipping", line)
+        if cmd_hash in steps:
+            print("skipping", cmd_hash, line)
             continue
 
-        [cmd_parts, to_fetch] = extract_urls(line.strip(), base_dir)
-        filenames = {}
-
-        for url,filename in to_fetch.items():
-            fetch_file(url, base_dir)
-
         # print("cmd_parts", cmd_parts)
-        cmd = " ".join(cmd_parts)
-        sp.call(cmd, shell=True, cwd=args.conf_dir)
+        cmd = line.strip()
 
-        steps[cmd_hash] = True
+        if not len(line):
+            continue
+
+        ret = sp.call(cmd, shell=True, cwd=args.conf_dir)
+
+        if ret != 0:
+            return
+
+        steps[cmd_hash] = { "cmd": cmd }
         save_steps(steps, base_dir)
         # sp.call(cmd_parts)
     # for filename in conf['fetch']:
