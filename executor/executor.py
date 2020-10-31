@@ -52,25 +52,11 @@ def load_steps(base_dir):
 
     return {}
 
-def main():
-    parser = argparse.ArgumentParser(description="""
-
-    python executor.py conf_dir
-""")
-
-    parser.add_argument('conf_dir')
-    #parser.add_argument('-o', '--options', default='yo',
-    #                    help="Some option", type='str')
-    #parser.add_argument('-u', '--useless', action='store_true',
-    #                    help='Another useless option')
-
-    args = parser.parse_args()
-    base_dir = args.conf_dir
-
-    with open(op.join(args.conf_dir, 'conf.cut')) as f:
+def execute(base_dir):
+    with open(op.join(base_dir, 'conf.cut')) as f:
         conf = f.readlines()
 
-    fetch_dir = op.join(args.conf_dir, 'fetch')
+    fetch_dir = op.join(base_dir, 'fetch')
     if not op.exists(fetch_dir):
         os.makedirs(fetch_dir)
 
@@ -90,7 +76,7 @@ def main():
             continue
 
         print("executing:", cmd)
-        ret = sp.run(cmd, shell=True, cwd=args.conf_dir, executable='/bin/bash')
+        ret = sp.run(cmd, shell=True, cwd=base_dir, executable='/bin/bash')
 
         if ret.returncode != 0:
             print("error")
