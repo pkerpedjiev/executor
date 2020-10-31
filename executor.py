@@ -40,7 +40,7 @@ def save_steps(steps, base_dir):
     steps_file = op.join(base_dir, '.steps')
 
     with open(steps_file, 'w') as f:
-        json.dump(steps, f)
+        json.dump(steps, f, indent=2)
 
 def load_steps(base_dir):
     steps_file = op.join(base_dir, '.steps')
@@ -89,9 +89,13 @@ def main():
         if not len(line):
             continue
 
-        ret = sp.call(cmd, shell=True, cwd=args.conf_dir)
+        print("executing:", cmd)
+        ret = sp.run(cmd, shell=True, cwd=args.conf_dir, executable='/bin/bash')
 
-        if ret != 0:
+        if ret.returncode != 0:
+            print("error")
+            print('stdout:', ret.stdout)
+            print('stderr:', ret.stderr)
             return
 
         steps[cmd_hash] = { "cmd": cmd }
