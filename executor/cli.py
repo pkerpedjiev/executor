@@ -3,7 +3,7 @@ from executor.executor import execute
 
 
 @click.command()
-@click.argument('base_dir')
-def cli(base_dir):
+@click.argument("conf_file", default=None)
+def cli(conf_file):
     """Example script."""
-    execute(base_dir)
+    execute(conf_file)
