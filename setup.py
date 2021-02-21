@@ -23,10 +23,10 @@ install_requires = get_requirements("requirements.txt")
 
 setup(
     name="executor",
-    version="0.1",
+    version="0.1.0",
     py_modules=["executor"],
     packages=["executor"],
-    install_requires=["Click",],
+    install_requires=install_requires,
     entry_points="""
         [console_scripts]
         executor=executor.cli:cli
